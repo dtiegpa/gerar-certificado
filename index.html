@@ -34,17 +34,14 @@
         CONTEUDO: document.getElementById('conteudo').value,
       }));
 
-      const resposta = await fetch('https://script.google.com/macros/s/AKfycbw3NVlxz-MqPOcr40LehzDBjZuDqt5H4MCXxhsqnOgbXkVrefpt-E_0QNWJY7aiIp_x6w/exec', {
+      const resposta = await fetch('https://script.google.com/macros/s/AKfycbyE-_KoAimxT6597KNkHrgxVkIcsztphtFTfK-Ew9TmrV52nML74DO5WFE0dWEOD1bA/exec', {
         method: 'POST',
         body: JSON.stringify(dados),
         headers: { 'Content-Type': 'application/json' }
       });
 
-      if (resposta.ok) {
-        alert('Certificados gerados com sucesso!');
-      } else {
-        alert('Erro ao gerar certificados.');
-      }
+      const texto = await resposta.text();
+      alert(texto);
     }
   </script>
 </body>
