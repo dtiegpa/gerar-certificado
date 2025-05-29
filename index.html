@@ -33,7 +33,7 @@
       const conteudo = document.getElementById('conteudo').value;
       const alunos = document.getElementById('alunos').value.trim().split('\n');
 
-      const svgTemplate = await fetch('Modelo certificado - EGPA.svg').then(res => res.text());
+      const svgTemplate = await fetch('modelo-certificado.svg').then(res => res.text());
 
       for (const nome of alunos) {
         let svgPersonalizado = svgTemplate
