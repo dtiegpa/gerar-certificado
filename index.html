@@ -1,36 +1,51 @@
-// Novo sistema baseado em Google Slides e Google Sheets - Gerador de Certificados via Apps Script
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de Certificados</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    textarea, input, button { display: block; margin-top: 10px; width: 100%; max-width: 500px; }
+  </style>
+</head>
+<body>
+  <h1>Gerador de Certificados - EGPA</h1>
 
-/**
- * Script para Google Apps Script
- * Substitui campos em um modelo do Google Slides e gera PDFs para cada aluno
- */
+  <input type="text" id="certificacao" placeholder="Nome da Certificação" required>
+  <input type="text" id="periodo" placeholder="Período (ex: 01 a 15 de maio de 2025)">
+  <input type="text" id="cargahoraria" placeholder="Carga horária (ex: 40h)">
+  <input type="text" id="professor" placeholder="Nome do(a) Professor(a)">
+  <input type="text" id="data" placeholder="Data do certificado (ex: 15 de maio de 2025)">
+  <textarea id="conteudo" rows="5" placeholder="Conteúdo programático"></textarea>
+  <textarea id="alunos" rows="10" placeholder="Lista de alunos (um por linha)"></textarea>
 
-function gerarCertificadosDoSlides() {
-  const modeloId = '1nGgazLyGhSvyo_6Vc2lkloSFc3W90wcG8bBCaPaFMrI';
-  const pastaDestino = DriveApp.getFolderById('1-z6kiofA3bnOMTEjbF8mBzzCxyNVFzKR');
+  <button onclick="enviarDados()">Gerar Certificados</button>
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Certificados');
-  const dados = sheet.getDataRange().getValues();
-  const cabecalho = dados[0];
+  <script>
+    async function enviarDados() {
+      const alunos = document.getElementById('alunos').value.trim().split('\n');
+      const dados = alunos.map(nome => ({
+        NOME: nome,
+        CERTIFICACAO: document.getElementById('certificacao').value,
+        PERIODO: document.getElementById('periodo').value,
+        CARGAHORARIA: document.getElementById('cargahoraria').value,
+        PROFESSOR: document.getElementById('professor').value,
+        DATA: document.getElementById('data').value,
+        CONTEUDO: document.getElementById('conteudo').value,
+      }));
 
-  for (let i = 1; i < dados.length; i++) {
-    const linha = dados[i];
-    const info = {};
-    cabecalho.forEach((col, idx) => info[col.trim()] = linha[idx]);
-
-    const copia = DriveApp.getFileById(modeloId).makeCopy(`Certificado - ${info.NOME}`, pastaDestino);
-    const slide = SlidesApp.openById(copia.getId());
-
-    slide.getSlides().forEach(pagina => {
-      cabecalho.forEach(col => {
-        const marcador = `{{${col.trim()}}}`;
-        pagina.replaceAllText(marcador, info[col.trim()]);
+      const resposta = await fetch('https://script.google.com/macros/s/AKfycbw3NVlxz-MqPOcr40LehzDBjZuDqt5H4MCXxhsqnOgbXkVrefpt-E_0QNWJY7aiIp_x6w/exec', {
+        method: 'POST',
+        body: JSON.stringify(dados),
+        headers: { 'Content-Type': 'application/json' }
       });
-    });
 
-    slide.saveAndClose();
-    const pdf = DriveApp.getFileById(copia.getId()).getAs('application/pdf');
-    pastaDestino.createFile(pdf);
-    DriveApp.getFileById(copia.getId()).setTrashed(true);
-  }
-}
+      if (resposta.ok) {
+        alert('Certificados gerados com sucesso!');
+      } else {
+        alert('Erro ao gerar certificados.');
+      }
+    }
+  </script>
+</body>
+</html>
