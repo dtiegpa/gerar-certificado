@@ -67,11 +67,13 @@
         canvasVerso.getContext('2d').drawImage(img, 0, hMetade, img.width, hMetade, 0, 0, img.width, hMetade);
 
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [img.width, hMetade] });
+        const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
 
-        pdf.addImage(canvasFrente.toDataURL('image/png'), 'PNG', 0, 0);
+        pdf.addImage(canvasFrente.toDataURL('image/png'), 'PNG', 0, 0, pageWidth, pageHeight);
         pdf.addPage();
-        pdf.addImage(canvasVerso.toDataURL('image/png'), 'PNG', 0, 0);
+        pdf.addImage(canvasVerso.toDataURL('image/png'), 'PNG', 0, 0, pageWidth, pageHeight);
 
         pdf.save(`Certificado - ${nome}.pdf`);
         URL.revokeObjectURL(url);
