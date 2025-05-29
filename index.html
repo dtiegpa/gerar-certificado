@@ -1,48 +1,6 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Gerador de Certificados</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    textarea, input, button { display: block; margin-top: 10px; width: 100%; max-width: 500px; }
-  </style>
-</head>
-<body>
-  <h1>Gerador de Certificados - EGPA</h1>
-
-  <input type="text" id="certificacao" placeholder="Nome da Certificação" required>
-  <input type="text" id="periodo" placeholder="Período (ex: 01 a 15 de maio de 2025)">
-  <input type="text" id="cargahoraria" placeholder="Carga horária (ex: 40h)">
-  <input type="text" id="professor" placeholder="Nome do(a) Professor(a)">
-  <input type="text" id="data" placeholder="Data do certificado (ex: 15 de maio de 2025)">
-  <textarea id="conteudo" rows="5" placeholder="Conteúdo programático"></textarea>
-  <textarea id="alunos" rows="10" placeholder="Lista de alunos (um por linha)"></textarea>
-
-  <button onclick="enviarDados()">Gerar Certificados</button>
-
-  <script>
-    async function enviarDados() {
-      const alunos = document.getElementById('alunos').value.trim().split('\n');
-      const dados = alunos.map(nome => ({
-        NOME: nome,
-        CERTIFICACAO: document.getElementById('certificacao').value,
-        PERIODO: document.getElementById('periodo').value,
-        CARGAHORARIA: document.getElementById('cargahoraria').value,
-        PROFESSOR: document.getElementById('professor').value,
-        DATA: document.getElementById('data').value,
-        CONTEUDO: document.getElementById('conteudo').value,
-      }));
-
-      const resposta = await fetch('https://script.google.com/macros/s/AKfycbylipGTezO42TZgV7eKfh7XOATtue8tZya9SE0ADmWlEe3nA2aJ08FRGcG1jbkK8ETR/exec', {
-        method: 'POST',
-        body: JSON.stringify(dados),
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      const texto = await resposta.text();
-      alert(texto);
-    }
-  </script>
-</body>
-</html>
+<form id="certForm">
+  <input type="text" name="curso" placeholder="Curso" required />
+  <input type="date" name="data" required />
+  <textarea name="alunos" placeholder="Um nome por linha" required rows="10"></textarea>
+  <button type="submit">Gerar Certificados</button>
+</form>
