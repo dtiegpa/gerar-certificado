@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de Certificados</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    textarea, input, button { display: block; margin-top: 10px; width: 100%; max-width: 500px; }
+  </style>
+</head>
+<body>
+  <h1>Gerador de Certificados - EGPA</h1>
+
+  <input type="text" id="certificacao" placeholder="Nome da Certificação" required>
+  <input type="text" id="periodo" placeholder="Período (ex: 01 a 15 de maio de 2025)">
+  <input type="text" id="cargahoraria" placeholder="Carga horária (ex: 40h)">
+  <input type="text" id="professor" placeholder="Nome do(a) Professor(a)">
+  <input type="text" id="data" placeholder="Data do certificado (ex: 15 de maio de 2025)">
+  <textarea id="conteudo" rows="5" placeholder="Conteúdo programático"></textarea>
+  <textarea id="alunos" rows="10" placeholder="Lista de alunos (um por linha)"></textarea>
+
+  <button onclick="gerarCertificados()">Gerar Certificados</button>
+
+  <script>
+    async function gerarCertificados() {
+      const certificacao = document.getElementById('certificacao').value;
+      const periodo = document.getElementById('periodo').value;
+      const cargahoraria = document.getElementById('cargahoraria').value;
+      const professor = document.getElementById('professor').value;
+      const data = document.getElementById('data').value;
+      const conteudo = document.getElementById('conteudo').value;
+      const alunos = document.getElementById('alunos').value.trim().split('\n');
+
+      const svgTemplate = await fetch('Modelo certificado - EGPA.svg').then(res => res.text());
+
+      for (const nome of alunos) {
+        let svgPersonalizado = svgTemplate
+          .replace(/\{\{NOME\}\}/g, nome)
+          .replace(/\{\{CERTIFICACAO\}\}/g, certificacao)
+          .replace(/\{\{PERIODO\}\}/g, periodo)
+          .replace(/\{\{CARGAHORARIA\}\}/g, cargahoraria)
+          .replace(/\{\{PROFESSOR\}\}/g, professor)
+          .replace(/\{\{DATA\}\}/g, data)
+          .replace(/\{\{CONTEUDO\}\}/g, conteudo);
+
+        const blob = new Blob([svgPersonalizado], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+
+        await new Promise(resolve => {
+          img.onload = () => resolve();
+          img.src = url;
+        });
+
+        const canvasFrente = document.createElement('canvas');
+        const canvasVerso = document.createElement('canvas');
+        const hMetade = img.height / 2;
+
+        canvasFrente.width = img.width;
+        canvasFrente.height = hMetade;
+        canvasFrente.getContext('2d').drawImage(img, 0, 0, img.width, hMetade, 0, 0, img.width, hMetade);
+
+        canvasVerso.width = img.width;
+        canvasVerso.height = hMetade;
+        canvasVerso.getContext('2d').drawImage(img, 0, hMetade, img.width, hMetade, 0, 0, img.width, hMetade);
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [img.width, hMetade] });
+
+        pdf.addImage(canvasFrente.toDataURL('image/png'), 'PNG', 0, 0);
+        pdf.addPage();
+        pdf.addImage(canvasVerso.toDataURL('image/png'), 'PNG', 0, 0);
+
+        pdf.save(`Certificado - ${nome}.pdf`);
+        URL.revokeObjectURL(url);
+      }
+    }
+  </script>
+</body>
+</html>
