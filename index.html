@@ -48,7 +48,13 @@
         const resultado = await resposta.json();
         document.getElementById('mensagem').innerHTML = `✅ Certificados gerados! <a href="${resultado.pastaUrl}" target="_blank">Acesse aqui</a>`;
       } catch (erro) {
-        document.getElementById('mensagem').textContent = '❌ Erro ao gerar certificados.';
+        try {
+          const texto = await erro.response.text();
+          document.getElementById('mensagem').textContent = `❌ Erro detalhado: ${texto}`;
+        } catch {
+          document.getElementById('mensagem').textContent = '❌ Erro inesperado. Verifique o console.';
+          console.error(erro);
+        }
       }
     });
   </script>
