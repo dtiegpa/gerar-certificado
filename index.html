@@ -1,6 +1,51 @@
-<form id="certForm">
-  <input type="text" name="curso" placeholder="Curso" required />
-  <input type="date" name="data" required />
-  <textarea name="alunos" placeholder="Um nome por linha" required rows="10"></textarea>
-  <button type="submit">Gerar Certificados</button>
-</form>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerar Certificados</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    input, textarea, button { width: 100%; padding: 10px; margin: 10px 0; }
+    textarea { resize: vertical; }
+  </style>
+</head>
+<body>
+
+  <h1>Gerador de Certificados</h1>
+  <form id="certForm">
+    <input type="text" name="curso" placeholder="Nome do Curso" required>
+    <input type="date" name="data" required>
+    <textarea name="alunos" rows="10" placeholder="Insira um nome por linha" required></textarea>
+    <button type="submit">Gerar Certificados</button>
+  </form>
+
+  <div id="mensagem"></div>
+
+  <script>
+    document.getElementById('certForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const dados = {
+        curso: formData.get('curso'),
+        data: formData.get('data'),
+        alunos: formData.get('alunos').split('\n').map(nome => nome.trim()).filter(Boolean)
+      };
+
+      document.getElementById('mensagem').textContent = 'Gerando certificados...';
+
+      try {
+        const resposta = await fetch('URL_DO_SEU_SCRIPT_GOOGLE_APPS', {
+          method: 'POST',
+          body: JSON.stringify(dados),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const resultado = await resposta.json();
+        document.getElementById('mensagem').innerHTML = `✅ Certificados gerados! <a href="${resultado.pastaUrl}" target="_blank">Acesse aqui</a>`;
+      } catch (erro) {
+        document.getElementById('mensagem').textContent = '❌ Erro ao gerar certificados.';
+      }
+    });
+  </script>
+
+</body>
+</html>
