@@ -13,7 +13,10 @@
 
   <h1>Gerador de Certificados</h1>
   <form id="certForm">
-    <input type="text" name="curso" placeholder="Nome do Curso" required>
+    <input type="text" name="certificacao" placeholder="Nome da Certificação" required>
+    <input type="text" name="periodo" placeholder="Período" required>
+    <input type="text" name="cargahoraria" placeholder="Carga Horária" required>
+    <input type="text" name="professor" placeholder="Professor" required>
     <input type="date" name="data" required>
     <textarea name="alunos" rows="10" placeholder="Insira um nome por linha" required></textarea>
     <button type="submit">Gerar Certificados</button>
@@ -26,7 +29,10 @@
       e.preventDefault();
       const formData = new FormData(e.target);
       const dados = {
-        curso: formData.get('curso'),
+        certificacao: formData.get('certificacao'),
+        periodo: formData.get('periodo'),
+        cargahoraria: formData.get('cargahoraria'),
+        professor: formData.get('professor'),
         data: formData.get('data'),
         alunos: formData.get('alunos').split('\n').map(nome => nome.trim()).filter(Boolean)
       };
@@ -34,7 +40,7 @@
       document.getElementById('mensagem').textContent = 'Gerando certificados...';
 
       try {
-        const resposta = await fetch('URL_DO_SEU_SCRIPT_GOOGLE_APPS', {
+        const resposta = await fetch('https://script.google.com/macros/s/AKfycbxo9MAGUzonYVG1ue3cUh5W4vL-svVjpF1CPWvRwCv8Q4gy_vKeXgMKVztA_48S10Cy/exec', {
           method: 'POST',
           body: JSON.stringify(dados),
           headers: { 'Content-Type': 'application/json' }
