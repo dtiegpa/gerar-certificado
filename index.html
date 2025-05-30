@@ -22,8 +22,10 @@
     <button type="submit">Enviar para Gerar Certificados</button>
   </form>
 
+  <div id="resultado"></div>
+
   <script>
-    document.getElementById('form-cert').addEventListener('submit', async function(event) {
+    document.getElementById('form-cert').addEventListener('submit', function(event) {
       event.preventDefault();
 
       const formData = new FormData(this);
@@ -35,14 +37,12 @@
         alunos: formData.get('alunos').split('\n').map(a => a.trim()).filter(Boolean)
       };
 
-      const response = await fetch('https://script.google.com/macros/s/AKfycbw_ZkEZ9IkF4lupH8o7pw7fzZSaqhtBgYHn1tqldVPUjNs3ZZhQaR3ZQMZnqnkaFLoM/exec', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      const resultado = await response.json();
-      alert(`Certificados gerados: ${resultado.links.join(', ')}`);
+      google.script.run.withSuccessHandler(function(res) {
+        const div = document.getElementById('resultado');
+        div.innerHTML = '<h3>Certificados gerados:</h3><ul>' +
+          res.links.map(link => `<li><a href="${link}" target="_blank">${link}</a></li>`).join('') +
+          '</ul>';
+      }).gerarCertificados(data);
     });
   </script>
 </body>
