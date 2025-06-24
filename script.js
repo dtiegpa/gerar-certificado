@@ -57,9 +57,16 @@ async function gerarCertificados() {
 
   const zip = new JSZip();
 
-  // 🔧 AJUSTE FEITO AQUI: busca direto na raiz
   const modeloPath = `${modelo}.pdf`;
-  const modeloBytes = await fetch(modeloPath).then(res => res.arrayBuffer());
+  let modeloBytes;
+
+  try {
+    modeloBytes = await fetch(modeloPath).then(res => res.arrayBuffer());
+  } catch (e) {
+    alert("Erro ao carregar o modelo PDF. Verifique se o arquivo existe na raiz.");
+    console.error(e);
+    return;
+  }
 
   for (const nome of nomes) {
     const pdfDoc = await PDFLib.PDFDocument.load(modeloBytes);
