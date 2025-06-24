@@ -16,92 +16,100 @@
   </style>
 </head>
 <body class="bg-light">
-  <div class="container py-5">
+  <div class="container py-4">
     <div class="card shadow">
       <div class="card-body">
         <h2 class="mb-4">🎓 Gerador de Certificados</h2>
 
-        <div class="mb-3">
-          <label for="modelo" class="form-label">Escolha o modelo:</label>
-          <select id="modelo" class="form-select" onchange="atualizarFormulario()">
-            <option value="">-- Selecione --</option>
-            <option value="certificacao">Certificação</option>
-            <option value="capacitacao">Capacitação</option>
-            <option value="declaracao">Declaração de Carga Horária</option>
-            <option value="inovacao">Prêmio InovAção</option>
-          </select>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="modelo" class="form-label">Escolha o modelo:</label>
+            <select id="modelo" class="form-select" onchange="atualizarFormulario()">
+              <option value="">-- Selecione --</option>
+              <option value="certificacao">Certificação</option>
+              <option value="capacitacao">Capacitação</option>
+              <option value="declaracao">Declaração de Carga Horária</option>
+              <option value="inovacao">Prêmio InovAção</option>
+            </select>
+          </div>
         </div>
 
         <div id="formularioCampos">
-          <div class="mb-3 campo" id="campo-nomes">
-            <label for="nomes" class="form-label">Nomes (um por linha):</label>
-            <textarea id="nomes" class="form-control" rows="4"></textarea>
-          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3 campo" id="campo-nomes">
+                <label for="nomes" class="form-label">Nomes (um por linha):</label>
+                <textarea id="nomes" class="form-control" rows="5"></textarea>
+              </div>
 
-          <div class="mb-3 campo" id="campo-certificacao">
-            <label for="certificacao" class="form-label">Certificação:</label>
-            <input type="text" id="certificacao" class="form-control">
-          </div>
+              <div class="mb-3 campo" id="campo-certificacao">
+                <label for="certificacao" class="form-label">Certificação:</label>
+                <input type="text" id="certificacao" class="form-control">
+              </div>
 
-          <div class="mb-3 campo" id="campo-capacitacao">
-            <label for="capacitacao" class="form-label">Capacitação:</label>
-            <input type="text" id="capacitacao" class="form-control">
-          </div>
+              <div class="mb-3 campo" id="campo-capacitacao">
+                <label for="capacitacao" class="form-label">Capacitação:</label>
+                <input type="text" id="capacitacao" class="form-control">
+              </div>
 
-          <div class="mb-3 campo" id="campo-evento">
-            <label for="evento" class="form-label">Evento/Certificação/Capacitação:</label>
-            <input type="text" id="evento" class="form-control">
-          </div>
+              <div class="mb-3 campo" id="campo-evento">
+                <label for="evento" class="form-label">Evento/Certificação/Capacitação:</label>
+                <input type="text" id="evento" class="form-control">
+              </div>
 
-          <div class="mb-3 campo" id="campo-cargahoraria">
-            <label for="cargahoraria" class="form-label">Carga Horária:</label>
-            <input type="text" id="cargahoraria" class="form-control">
-          </div>
+              <div class="mb-3 campo" id="campo-cargahoraria">
+                <label for="cargahoraria" class="form-label">Carga Horária:</label>
+                <input type="text" id="cargahoraria" class="form-control">
+              </div>
 
-          <div class="mb-3 campo" id="campo-data">
-            <label for="data" class="form-label">Data:</label>
-            <input type="text" id="data" class="form-control">
-          </div>
+              <div class="mb-3 campo" id="campo-data">
+                <label for="data" class="form-label">Data:</label>
+                <input type="text" id="data" class="form-control">
+              </div>
+            </div>
 
-          <div class="mb-3 campo" id="campo-periodo">
-            <label for="periodo" class="form-label">Período:</label>
-            <input type="text" id="periodo" class="form-control">
-          </div>
+            <div class="col-md-6">
+              <div class="mb-3 campo" id="campo-periodo">
+                <label for="periodo" class="form-label">Período:</label>
+                <input type="text" id="periodo" class="form-control">
+              </div>
 
-          <div class="mb-3 campo" id="campo-conteudo">
-            <label for="conteudo" class="form-label">Conteúdo (um item por linha):</label>
-            <textarea id="conteudo" class="form-control" rows="4"></textarea>
-          </div>
+              <div class="mb-3 campo" id="campo-conteudo">
+                <label for="conteudo" class="form-label">Conteúdo (um item por linha):</label>
+                <textarea id="conteudo" class="form-control" rows="5"></textarea>
+              </div>
 
-          <div class="mb-3 campo" id="campo-professor">
-            <label for="professor" class="form-label">Professor:</label>
-            <input type="text" id="professor" class="form-control">
-          </div>
+              <div class="mb-3 campo" id="campo-professor">
+                <label for="professor" class="form-label">Professor:</label>
+                <input type="text" id="professor" class="form-control">
+              </div>
 
-          <div class="mb-3 campo" id="campo-turno">
-            <label for="turno" class="form-label">Turno:</label>
-            <select id="turno" class="form-select">
-              <option value="">-- Selecione --</option>
-              <option value="MANHÃ">Manhã</option>
-              <option value="TARDE">Tarde</option>
-              <option value="NOITE">Noite</option>
-            </select>
-          </div>
+              <div class="mb-3 campo" id="campo-turno">
+                <label for="turno" class="form-label">Turno:</label>
+                <select id="turno" class="form-select">
+                  <option value="">-- Selecione --</option>
+                  <option value="MANHÃ">Manhã</option>
+                  <option value="TARDE">Tarde</option>
+                  <option value="NOITE">Noite</option>
+                </select>
+              </div>
 
-          <div class="mb-4 campo" id="campo-horario">
-            <label for="horario" class="form-label">Horário:</label>
-            <input type="text" id="horario" class="form-control">
+              <div class="mb-3 campo" id="campo-horario">
+                <label for="horario" class="form-label">Horário:</label>
+                <input type="text" id="horario" class="form-control">
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="d-grid">
-          <button class="btn btn-primary" onclick="gerarCertificados()">Gerar Certificados</button>
+        <div class="text-center mt-4">
+          <button class="btn btn-primary btn-lg px-5" onclick="gerarCertificados()">Gerar Certificados</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Bibliotecas externas -->
+  <!-- Bibliotecas -->
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
