@@ -48,9 +48,7 @@ async function gerarCertificados() {
     data: "DATA",
     periodo: "PERIODO",
     conteudo: "CONTEUDO",
-    professor: "PROFESSOR",
-    turno: "TURNO",
-    horario: "HORARIO"
+    professor: "PROFESSOR"
   };
 
   const zip = new JSZip();
