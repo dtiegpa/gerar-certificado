@@ -1,18 +1,13 @@
-// Campos por modelo
 const camposPorModelo = {
-  certificacao: ["nomes", "certificacao", "cargahoraria", "data", "periodo", "conteudo", "professor", "turno", "horario"],
-  capacitacao: ["nomes", "capacitacao", "cargahoraria", "data", "periodo", "conteudo", "professor", "turno", "horario"],
-  declaracao: ["nomes", "evento", "cargahoraria", "data", "periodo", "conteudo", "professor", "turno", "horario"],
+  certificacao: ["nomes", "certificacao", "cargahoraria", "data", "periodo", "conteudo", "professor"],
+  capacitacao: ["nomes", "capacitacao", "cargahoraria", "data", "periodo", "conteudo", "professor"],
+  declaracao: ["nomes", "evento", "cargahoraria", "data", "periodo", "conteudo", "professor"],
   inovacao: ["nomes"]
 };
 
-// Atualiza o formulário com base no modelo escolhido
 function atualizarFormulario() {
   const modelo = document.getElementById("modelo").value;
-  const campos = document.querySelectorAll(".campo");
-
-  campos.forEach(campo => campo.style.display = "none");
-
+  document.querySelectorAll(".campo").forEach(c => c.style.display = "none");
   if (camposPorModelo[modelo]) {
     camposPorModelo[modelo].forEach(id => {
       const campo = document.getElementById("campo-" + id);
@@ -21,7 +16,6 @@ function atualizarFormulario() {
   }
 }
 
-// Geração principal
 async function gerarCertificados() {
   const modelo = document.getElementById("modelo").value;
   if (!modelo || !camposPorModelo[modelo]) {
@@ -41,9 +35,8 @@ async function gerarCertificados() {
     dados[id] = el ? el.value.trim() : "";
   });
 
-  // Conteúdo em lista
   if (dados.conteudo) {
-    dados.conteudo = dados.conteudo.split("\n").map(linha => linha.trim()).filter(l => l).join(", ");
+    dados.conteudo = dados.conteudo.split("\n").map(l => l.trim()).filter(l => l).join(", ");
   }
 
   const marcadorMap = {
@@ -61,7 +54,6 @@ async function gerarCertificados() {
   };
 
   const zip = new JSZip();
-
   const modeloPath = `modelos/${modelo}.pdf`;
   const modeloBytes = await fetch(modeloPath).then(res => res.arrayBuffer());
 
@@ -69,27 +61,18 @@ async function gerarCertificados() {
     const pdfDoc = await PDFLib.PDFDocument.load(modeloBytes);
     const pages = pdfDoc.getPages();
     const page = pages[0];
-
     const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
 
-    const substitutions = {
-      NOME: nome.trim(),
-    };
-
+    const substitutions = { NOME: nome.trim() };
     Object.keys(dados).forEach(id => {
-      const key = marcadorMap[id];
-      if (key && key !== "NOME") {
-        substitutions[key] = dados[id];
-      }
+      const tag = marcadorMap[id];
+      if (tag && tag !== "NOME") substitutions[tag] = dados[id];
     });
 
-    const pageText = page.getTextContent ? await page.getTextContent() : null;
-
-    Object.keys(substitutions).forEach(tag => {
-      const marcador = `{{${tag}}}`;
-      page.drawText(substitutions[tag] || "", {
+    Object.entries(substitutions).forEach(([tag, valor], i) => {
+      page.drawText(valor || "", {
         x: 100,
-        y: 300 - Object.keys(substitutions).indexOf(tag) * 20, // ajuste vertical simples
+        y: 300 - i * 18,
         size: 14,
         font,
         color: PDFLib.rgb(0, 0, 0)
@@ -97,8 +80,7 @@ async function gerarCertificados() {
     });
 
     const pdfBytes = await pdfDoc.save();
-    const nomeArquivo = `${nome.trim()}.pdf`;
-    zip.file(nomeArquivo, pdfBytes);
+    zip.file(`${nome.trim()}.pdf`, pdfBytes);
   }
 
   const zipBlob = await zip.generateAsync({ type: "blob" });
