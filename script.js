@@ -36,7 +36,11 @@ async function gerarCertificados() {
   });
 
   if (dados.conteudo) {
-    dados.conteudo = dados.conteudo.split("\n").map(l => l.trim()).filter(l => l).join(", ");
+    dados.conteudo = dados.conteudo
+      .split("\n")
+      .map(l => l.trim())
+      .filter(l => l)
+      .join(", ");
   }
 
   const marcadorMap = {
@@ -52,7 +56,9 @@ async function gerarCertificados() {
   };
 
   const zip = new JSZip();
-  const modeloPath = `modelos/${modelo}.pdf`;
+
+  // 🔧 AJUSTE FEITO AQUI: busca direto na raiz
+  const modeloPath = `${modelo}.pdf`;
   const modeloBytes = await fetch(modeloPath).then(res => res.arrayBuffer());
 
   for (const nome of nomes) {
