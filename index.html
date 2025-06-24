@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de Certificados</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px auto;
+      max-width: 800px;
+      padding: 20px;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    textarea, input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .campo {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎓 Gerador de Certificados</h2>
+
+  <label for="modelo">Escolha o modelo:</label>
+  <select id="modelo" onchange="atualizarFormulario()">
+    <option value="">-- Selecione --</option>
+    <option value="certificacao">Certificação</option>
+    <option value="capacitacao">Capacitação</option>
+    <option value="declaracao">Declaração de Carga Horária</option>
+    <option value="inovacao">Prêmio InovAção</option>
+  </select>
+
+  <div id="formularioCampos">
+    <div class="campo" id="campo-nomes">
+      <label for="nomes">Nomes (um por linha):</label>
+      <textarea id="nomes" rows="5"></textarea>
+    </div>
+
+    <div class="campo" id="campo-certificacao">
+      <label for="certificacao">Certificação:</label>
+      <input type="text" id="certificacao">
+    </div>
+
+    <div class="campo" id="campo-capacitacao">
+      <label for="capacitacao">Capacitação:</label>
+      <input type="text" id="capacitacao">
+    </div>
+
+    <div class="campo" id="campo-evento">
+      <label for="evento">Evento/Certificação/Capacitação:</label>
+      <input type="text" id="evento">
+    </div>
+
+    <div class="campo" id="campo-cargahoraria">
+      <label for="cargahoraria">Carga Horária:</label>
+      <input type="text" id="cargahoraria">
+    </div>
+
+    <div class="campo" id="campo-data">
+      <label for="data">Data:</label>
+      <input type="text" id="data">
+    </div>
+
+    <div class="campo" id="campo-periodo">
+      <label for="periodo">Período:</label>
+      <input type="text" id="periodo">
+    </div>
+
+    <div class="campo" id="campo-conteudo">
+      <label for="conteudo">Conteúdo (um por linha):</label>
+      <textarea id="conteudo" rows="5"></textarea>
+    </div>
+
+    <div class="campo" id="campo-professor">
+      <label for="professor">Professor:</label>
+      <input type="text" id="professor">
+    </div>
+
+    <div class="campo" id="campo-turno">
+      <label for="turno">Turno:</label>
+      <select id="turno">
+        <option value="">-- Selecione --</option>
+        <option value="MANHÃ">Manhã</option>
+        <option value="TARDE">Tarde</option>
+        <option value="NOITE">Noite</option>
+      </select>
+    </div>
+
+    <div class="campo" id="campo-horario">
+      <label for="horario">Horário:</label>
+      <input type="text" id="horario">
+    </div>
+  </div>
+
+  <button onclick="gerarCertificados()">Gerar Certificados</button>
+
+  <!-- Bibliotecas necessárias -->
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
